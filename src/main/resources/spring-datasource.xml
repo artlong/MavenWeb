@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:property-placeholder location="classpath:datasource.properties"/>
+	
+	<beans profile="loc">
+		<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+			<property name="driverClass" value="${jdbc.driver_class}" />
+			<property name="jdbcUrl" value="${jdbc.url}" />
+			<property name="user" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			<property name="autoCommitOnClose" value="false" />
+			<property name="checkoutTimeout" value="5000" />
+			<property name="maxStatements" value="100" />
+			<property name="initialPoolSize" value="10" />
+			<property name="minPoolSize" value="10" />
+			<property name="maxPoolSize" value="100" />
+			<property name="maxIdleTime" value="0" />
+			<property name="maxIdleTimeExcessConnections" value="120" />
+			<property name="idleConnectionTestPeriod" value="120" />
+			<property name="acquireIncrement" value="3" />
+			<property name="acquireRetryDelay" value="1000" />
+			<property name="acquireRetryAttempts" value="30" />
+			<property name="breakAfterAcquireFailure" value="false" />
+			<property name="testConnectionOnCheckout" value="false" />
+			<property name="unreturnedConnectionTimeout" value="1200" />
+			<property name="debugUnreturnedConnectionStackTraces" value="true" />
+			<property name="numHelperThreads" value="6" />
+		</bean>
+	</beans>
+	
+	<beans profile="dev">
+		<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+			<property name="jndiName">
+				<value>${jndi.datasource}</value>
+			</property>
+		</bean>
+	</beans>
+</beans>
